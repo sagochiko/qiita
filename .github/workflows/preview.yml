@@ -1,0 +1,21 @@
+name: Preview articles
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "public/**"
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Show changed articles
+        run: |
+          echo "## 変更された記事" >> $GITHUB_STEP_SUMMARY
+          git diff --name-only origin/main -- public/ | while read file; do
+            echo "- ${file}" >> $GITHUB_STEP_SUMMARY
+          done
